@@ -4,6 +4,36 @@ import org.bukkit.Bukkit;
 
 public class ServerVersion {
 
+    // Singleton
+    private static final ServerVersion instance = new ServerVersion();
+    public static ServerVersion getInstance() {
+        return instance;
+    }
+
+    private ServerVersion() {
+        try {
+            this.serverVersion = Version.valueOf(Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3]);
+            System.out.println("[PacketManager] Your Server Version is " + serverVersion.getStrippedName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private Version serverVersion;
+
+    public String getVersion() {
+        return this.serverVersion.getNMSName();
+    }
+
+    public String getStrippedVersion() {
+        return this.serverVersion.getStrippedName();
+    }
+
+    public boolean above(Version version) {
+        return serverVersion.getId() >= version.getId();
+    }
+
     public enum Version {
 
         v1_8_R1("v1_8_R1", 1),
@@ -20,43 +50,17 @@ public class ServerVersion {
         v1_15_R1("v1_15_R1", 12),
         v1_16_R1("v1_16_R1", 13);
 
-        private String name;
-        private int id;
+        private final String name;
+        private final int id;
 
         Version(String name, int id) {
             this.name = name;
             this.id = id;
         }
 
-        String getNMSName() { return this.name; }
-        String getStrippedName() { return this.name.substring(0, this.name.length()-1).replaceAll("v", "").replaceAll("R", "").replaceAll("_", "."); }
+        public String getNMSName() { return this.name; }
+        public String getStrippedName() { return this.name.substring(0, this.name.length()-1).replaceAll("v", "").replaceAll("R", "").replaceAll("_", "."); }
 
         int getId() { return id; }
-    }
-
-    private static ServerVersion instance = new ServerVersion();
-    public static ServerVersion getInstance() { return instance; }
-
-    private Version serverVersion;
-
-    private ServerVersion() {
-        try {
-            this.serverVersion = Version.valueOf(Bukkit.getServer().getClass().getPackage().getName().toString().split("\\.")[3]);
-            System.out.println("[PacketManager] Your Server Version is " + serverVersion.getStrippedName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public String getVersion() {
-        return this.serverVersion.getNMSName();
-    }
-
-    public String getStrippedVersion() {
-        return this.serverVersion.getStrippedName();
-    }
-
-    public boolean above(Version version) {
-        return serverVersion.getId() >= version.getId();
     }
 }

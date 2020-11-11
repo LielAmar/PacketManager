@@ -2,7 +2,6 @@ package com.packetmanager.lielamar;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -12,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("unused")
-public class PacketManager {
+@SuppressWarnings("all")
+public class PacketManagerOld {
 
     private static Class<?> craftPlayerClass = null;
     private static Method getHandleMethod = null;
@@ -32,12 +31,12 @@ public class PacketManager {
     private static Class<?> chatMessageTypeClass = null;
     private static Method chatMessageTypeMethod = null;
     private static Class<?> packetPlayOutChatClass = null;
-    private static Constructor<?> packetPlayOutChatConstructor = null;
+    private static Constructor packetPlayOutChatConstructor = null;
 
     private static Class<?> enumTitleActionClass = null;
     private static Method enumTitleActionMethod = null;
     private static Class<?> packetPlayOutTitleClass = null;
-    private static Constructor<?> packetPlayOutTitleConstructor = null;
+    private static Constructor packetPlayOutTitleConstructor = null;
 
     private static Class<?> entityInsentientClass = null;
     private static Class<?> entityTypesClass = null;
@@ -61,17 +60,17 @@ public class PacketManager {
             if(packetPlayOutWorldParticlesClass == null)
                 packetPlayOutWorldParticlesClass = getNMSClass("PacketPlayOutWorldParticles");
 
-            Object packet;
+            Object packet = null;
 
             if(ServerVersion.getInstance().above(ServerVersion.Version.v1_15_R1)) { // 1.15 (or above) constructor
                 if(particleClass == null)
                     particleClass = getNMSClass("Particle");
 
                 if(particleMethod == null)
-                    particleMethod = particleClass.getMethod("value", (Class<?>) null);
+                    particleMethod = particleClass.getMethod("value", null);
 
                 if(packetPlayOutWorldParticlesConstructor == null)
-                    packetPlayOutWorldParticlesConstructor = packetPlayOutWorldParticlesClass.getConstructor(particleClass, boolean.class, double.class, double.class, double.class, float.class, float.class, float.class, float.class, int.class, int[].class);
+                    packetPlayOutWorldParticlesConstructor = packetPlayOutWorldParticlesClass.getConstructor(new Class[] { particleClass, boolean.class, double.class, double.class, double.class, float.class, float.class, float.class, float.class, int.class, int[].class });
 
                 Object particle = particleMethod.invoke(particleEffect.toString());
                 packet = packetPlayOutWorldParticlesConstructor.newInstance(particle, true, location.getX(), location.getY(), location.getZ(), xOffset, yOffset, zOffset, speed, amount);
@@ -80,10 +79,10 @@ public class PacketManager {
                     particleClass = getNMSClass("Particle");
 
                 if(particleMethod == null)
-                    particleMethod = particleClass.getMethod("value", (Class<?>) null);
+                    particleMethod = particleClass.getMethod("value", null);
 
                 if(packetPlayOutWorldParticlesConstructor == null)
-                    packetPlayOutWorldParticlesConstructor = packetPlayOutWorldParticlesClass.getConstructor(particleClass, boolean.class, float.class, float.class, float.class, float.class, float.class, float.class, float.class, int.class, int[].class);
+                    packetPlayOutWorldParticlesConstructor = packetPlayOutWorldParticlesClass.getConstructor(new Class[] { particleClass, boolean.class, float.class, float.class, float.class, float.class, float.class, float.class, float.class, int.class, int[].class });
 
                 Object particle = particleMethod.invoke(particleEffect.toString());
                 packet = packetPlayOutWorldParticlesConstructor.newInstance(particle, true, (float) location.getX(), (float) location.getY(), (float) location.getZ(), xOffset, yOffset, zOffset, speed, amount);
@@ -92,10 +91,10 @@ public class PacketManager {
                     enumParticleClass = getNMSClass("EnumParticle");
 
                 if(enumParticleMethod == null)
-                    enumParticleMethod = enumParticleClass.getMethod("value", (Class<?>) null);
+                    enumParticleMethod = enumParticleClass.getMethod("value", null);
 
                 if(packetPlayOutWorldParticlesConstructor == null)
-                    packetPlayOutWorldParticlesConstructor = packetPlayOutWorldParticlesClass.getConstructor(enumParticleClass, boolean.class, float.class, float.class, float.class, float.class, float.class, float.class, float.class, int.class, int[].class);
+                    packetPlayOutWorldParticlesConstructor = packetPlayOutWorldParticlesClass.getConstructor(new Class[] { enumParticleClass, boolean.class, float.class, float.class, float.class, float.class, float.class, float.class, float.class, int.class, int[].class});
 
                 Object particle = enumParticleMethod.invoke(particleEffect.toString());
                 packet = packetPlayOutWorldParticlesConstructor.newInstance(particle, true, (float) location.getX(), (float) location.getY(), (float) location.getZ(), xOffset, yOffset, zOffset, speed, amount, new int[] {});
@@ -119,17 +118,17 @@ public class PacketManager {
                 iChatBaseComponentClass = getNMSClass("IChatBaseComponent");
 
             if(chatSerializerMethod == null)
-                chatSerializerMethod = iChatBaseComponentClass.getClasses()[0].getDeclaredMethod("a", String.class);
+                chatSerializerMethod = iChatBaseComponentClass.getClasses()[0].getDeclaredMethod("a", new Class[]{ String.class });
 
 
             if(packetPlayOutChatClass == null)
                 packetPlayOutChatClass = getNMSClass("PacketPlayOutChat");
 
             if(packetPlayOutChatConstructor == null)
-                packetPlayOutChatConstructor = packetPlayOutChatClass.getConstructor(iChatBaseComponentClass, byte.class);
+                packetPlayOutChatConstructor = packetPlayOutChatClass.getConstructor(new Class[] { iChatBaseComponentClass, byte.class } );
 
             Object packet;
-            Object chatSerializerObject = chatSerializerMethod.invoke(null, "{\"text\": \"" + message + "\"}");
+            Object chatSerializerObject = chatSerializerMethod.invoke(null, new Object[]{"{\"text\": \"" + message + "\"}"});
 
             if(ServerVersion.getInstance().above(ServerVersion.Version.v1_12_R1)) {
                 // 1.12 (or above)
@@ -137,16 +136,16 @@ public class PacketManager {
                     chatMessageTypeClass = getNMSClass("ChatMessageType");
 
                 if(chatMessageTypeMethod == null)
-                    chatMessageTypeMethod = chatMessageTypeClass.getMethod("value", (Class<?>) null);
+                    chatMessageTypeMethod = chatMessageTypeClass.getMethod("value", null);
 
                 if(packetPlayOutChatConstructor == null)
-                    packetPlayOutChatConstructor = packetPlayOutChatClass.getConstructor(iChatBaseComponentClass, chatMessageTypeClass);
+                    packetPlayOutChatConstructor = packetPlayOutChatClass.getConstructor(new Class[] { iChatBaseComponentClass, chatMessageTypeClass } );
 
                 Object chatMessageTypeObject = chatMessageTypeMethod.invoke("GAME_INFO");
-                packet = packetPlayOutChatConstructor.newInstance(chatSerializerObject, chatMessageTypeObject);
+                packet = packetPlayOutChatConstructor.newInstance(new Object[] { chatSerializerObject, chatMessageTypeObject });
             } else {
                 // 1.8 (or above)
-                packet = packetPlayOutChatConstructor.newInstance(chatSerializerObject, (byte)2);
+                packet = packetPlayOutChatConstructor.newInstance(new Object[] { chatSerializerObject, (byte)2 });
             }
 
             sendPacket(player, packet);
@@ -171,13 +170,13 @@ public class PacketManager {
                 iChatBaseComponentClass = getNMSClass("IChatBaseComponent");
 
             if(chatSerializerMethod == null)
-                chatSerializerMethod = iChatBaseComponentClass.getClasses()[0].getDeclaredMethod("a", String.class);
+                chatSerializerMethod = iChatBaseComponentClass.getClasses()[0].getDeclaredMethod("a", new Class[]{ String.class });
 
             if(enumTitleActionClass == null)
                 enumTitleActionClass = packetPlayOutTitleClass.getDeclaredClasses()[0];
 
             if(enumTitleActionMethod == null)
-                enumTitleActionMethod = enumTitleActionClass.getMethod("value", (Class<?>) null);
+                enumTitleActionMethod = enumTitleActionClass.getMethod("value", null);
 
             if(packetPlayOutTitleClass == null)
                 packetPlayOutTitleClass = getNMSClass("PacketPlayOutTitle");
@@ -192,7 +191,7 @@ public class PacketManager {
             if(title != null) {
 
                 Object titleType = enumTitleActionMethod.invoke("TITLE");
-                chatSerializerObject = chatSerializerMethod.invoke(null, "{\"text\": \"" + title + "\"}");
+                chatSerializerObject = chatSerializerMethod.invoke(null, new Object[] { "{\"text\": \"" + title + "\"}" });
 
                 packet = packetPlayOutTitleConstructor.newInstance(titleType, chatSerializerObject, fadeIn, showTime, fadeOut);
                 sendPacket(player, packet);
@@ -200,7 +199,7 @@ public class PacketManager {
 
             if(subtitle != null) {
                 Object titleType = enumTitleActionMethod.invoke("SUBTITLE");
-                chatSerializerObject = chatSerializerMethod.invoke(null, "{\"text\": \"" + subtitle + "\"}");
+                chatSerializerObject = chatSerializerMethod.invoke(null, new Object[] { "{\"text\": \"" + subtitle + "\"}" });
 
                 packet = packetPlayOutTitleConstructor.newInstance(titleType, chatSerializerObject, fadeIn, showTime, fadeOut);
                 sendPacket(player, packet);
@@ -302,38 +301,6 @@ public class PacketManager {
         }
     }
 
-    /**
-     * Sends a packet to a player
-     *
-     * @param player          Player to send packet to
-     * @param packet          Packet to send
-     * @return                Whether or not packet was sent
-     */
-    public static boolean sendPacket(Player player, Object packet) {
-        try {
-            if(craftPlayerClass == null)
-                craftPlayerClass = getClass("org.bukkit.craftbukkit", "entity.CraftPlayer");
-
-            if(getHandleMethod == null)
-                getHandleMethod = craftPlayerClass.getMethod("getHandle");
-
-            if(connectionField == null)
-                connectionField = craftPlayerClass.getField("playerConnection");
-
-            if(sendPacketMethod == null)
-                sendPacketMethod = getNMSClass("PlayerConnection").getMethod("sendPacket", getNMSClass("Packet"));
-
-            Object craftPlayer = getHandleMethod.invoke(player);
-            Object playerConnection = connectionField.get(craftPlayer);
-
-            sendPacketMethod.invoke(playerConnection, packet);
-            return true;
-        } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | NoSuchFieldException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
 
     /**
      * @param className       Name of the class
@@ -368,7 +335,7 @@ public class PacketManager {
      * @param fieldName        Private field to get
      * @param clazz            Class to get field of
      * @param object           Object to use in order to get the field
-     * @return                 Private field
+     * @return
      */
     public static Object getPrivateField(String fieldName, Class<?> clazz, Object object) {
         Field field;
@@ -395,6 +362,39 @@ public class PacketManager {
             if(current.getSuperclass().getName().equalsIgnoreCase(superClass.getName())) return true;
 
             current = current.getSuperclass();
+        }
+        return false;
+    }
+
+
+    /**
+     * Sends a packet to a player
+     *
+     * @param player          Player to send packet to
+     * @param packet          Packet to send
+     * @return                Whether or not packet was sent
+     */
+    public static boolean sendPacket(Player player, Object packet) {
+        try {
+            if(craftPlayerClass == null)
+                craftPlayerClass = getClass("org.bukkit.craftbukkit", "entity.CraftPlayer");
+
+            if(getHandleMethod == null)
+                getHandleMethod = craftPlayerClass.getMethod("getHandle");
+
+            if(connectionField == null)
+                connectionField = craftPlayerClass.getField("playerConnection");
+
+            if(sendPacketMethod == null)
+                sendPacketMethod = getNMSClass("PlayerConnection").getMethod("sendPacket", getNMSClass("Packet"));
+
+            Object craftPlayer = getHandleMethod.invoke(player);
+            Object playerConnection = connectionField.get(craftPlayer);
+
+            sendPacketMethod.invoke(playerConnection, packet);
+            return true;
+        } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | NoSuchFieldException e) {
+            e.printStackTrace();
         }
         return false;
     }

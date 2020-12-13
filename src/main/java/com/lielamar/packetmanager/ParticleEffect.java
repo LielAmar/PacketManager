@@ -1,4 +1,4 @@
-package com.packetmanager.lielamar;
+package com.lielamar.packetmanager;
 
 public enum ParticleEffect {
 

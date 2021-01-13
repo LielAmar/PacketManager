@@ -124,13 +124,23 @@ public class PacketManager {
             if(packetPlayOutChatClass == null)
                 packetPlayOutChatClass = getNMSClass("PacketPlayOutChat");
 
-            if(packetPlayOutChatConstructor == null)
-                packetPlayOutChatConstructor = packetPlayOutChatClass.getConstructor(iChatBaseComponentClass, byte.class);
-
             Object packet;
             Object chatSerializerObject = chatSerializerMethod.invoke(null, "{\"text\": \"" + message + "\"}");
 
-            if(ServerVersion.getInstance().above(ServerVersion.Version.v1_12_R1)) {
+            if(ServerVersion.getInstance().above(ServerVersion.Version.v1_16_R1)) {
+                // 1.16 (or above)
+                if(chatMessageTypeClass == null)
+                    chatMessageTypeClass = getNMSClass("ChatMessageType");
+
+                if(chatMessageTypeMethod == null)
+                    chatMessageTypeMethod = chatMessageTypeClass.getMethod("value", (Class<?>) null);
+
+                if(packetPlayOutChatConstructor == null)
+                    packetPlayOutChatConstructor = packetPlayOutChatClass.getConstructor(iChatBaseComponentClass, chatMessageTypeClass, player.getUniqueId().getClass());
+
+                Object chatMessageTypeObject = chatMessageTypeMethod.invoke("GAME_INFO");
+                packet = packetPlayOutChatConstructor.newInstance(chatSerializerObject, chatMessageTypeObject, player.getUniqueId());
+            } else if(ServerVersion.getInstance().above(ServerVersion.Version.v1_12_R1)) {
                 // 1.12 (or above)
                 if(chatMessageTypeClass == null)
                     chatMessageTypeClass = getNMSClass("ChatMessageType");
@@ -144,6 +154,9 @@ public class PacketManager {
                 Object chatMessageTypeObject = chatMessageTypeMethod.invoke("GAME_INFO");
                 packet = packetPlayOutChatConstructor.newInstance(chatSerializerObject, chatMessageTypeObject);
             } else {
+                if(packetPlayOutChatConstructor == null)
+                    packetPlayOutChatConstructor = packetPlayOutChatClass.getConstructor(iChatBaseComponentClass, byte.class);
+
                 // 1.8 (or above)
                 packet = packetPlayOutChatConstructor.newInstance(chatSerializerObject, (byte)2);
             }

@@ -48,7 +48,9 @@ public class ServerVersion {
         v1_13_R2("v1_13_R2", 10),
         v1_14_R1("v1_14_R1", 11),
         v1_15_R1("v1_15_R1", 12),
-        v1_16_R1("v1_16_R1", 13);
+        v1_16_R1("v1_16_R1", 13),
+        v1_16_R2("v1_16_R2", 14),
+        v1_16_R3("v1_16_R3", 15);
 
         private final String name;
         private final int id;

@@ -1,6 +1,6 @@
 # PacketManager
 
-[<img alt="discord" src="https://lielamar.com/plugins/github_discord.png" size=1.5>](https://discord.gg/NzgBrqR)
+[![Discord](https://img.shields.io/discord/416652224505184276?color=%235865F2&label=Join%20My%20Discord)](https://discord.gg/NzgBrqR)
 
 ## Information
 
@@ -19,7 +19,7 @@ You can either download the source code, compile and include it as a part of you
 ```maven
         <repository>
             <id>lielamar-api</id>
-            <url>https://api.lielamar.com/repository/maven-public/</url>
+            <url>https://repo.lielamar.com/repository/maven-public/</url>
         </repository>
 
         <dependency>

@@ -5,15 +5,47 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.lielamar</groupId>
-    <artifactId>PacketManager</artifactId>
+    <artifactId>NMSManager</artifactId>
     <version>1.1.2</version>
+
+    <name>NMS Manager</name>
+    <description>A library for dealing with NMS</description>
+    <url>https://lielamar.com</url>
+
+    <scm>
+        <connection>scm:git:git://github.com/lielamar/nmsmanager.git</connection>
+        <developerConnection>scm:git:ssh://github.com:lielamar/nmsmanager.git</developerConnection>
+        <url>http://github.com/lielamar/nmsmanager/tree/master</url>
+    </scm>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://github.com/LielAmar/NMSManager/blob/main/LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>lielamar</id>
+            <name>Liel Amar</name>
+            <email>liel@lielamar.com</email>
+            <url>https://www.lielamar.com</url>
+            <organization>LielAmar</organization>
+            <organizationUrl>https://www.lielamar.com</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>Israel/Jerusalem</timezone>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <craftbukkit.path>D:/Build Tool/spigot-1.16.4.jar</craftbukkit.path>
     </properties>
 
     <build>
@@ -30,13 +62,32 @@
         </plugins>
     </build>
 
+    <repositories>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+
+        <repository>
+            <id>bungeecord-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${craftbukkit.path}</systemPath>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.16.2-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-api</artifactId>
+            <version>1.19-R0.1-SNAPSHOT</version>
+            <type>jar</type>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
